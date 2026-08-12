@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AISystem {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  department  String
+  status      String
+
+  purpose     String
+  process     String
+
+  aiType      String
+  provider    String
+  model       String?
+  usageType   String
+
+  affectedPersons              String // JSON array
+  decisionType                 String
+  dataCategories               String // JSON array
+  dataTransferredToExternal    String
+
+  humanReview           String
+  approvalProcess       String
+  outputControl         String
+  logging               String
+  interventionAvailable String
+  escalationProcess     String
+
+  directHumanInteraction    String
+  aiUsageNotice             String
+  aiGeneratedContentPublished String
+  contentHumanReviewed      String
+
+  responsibleRole    String?
+  trainingProvided   String
+  usageRulesDefined  String
+
+  recruitmentScenario     Boolean @default(false)
+  candidatePrioritisation Boolean @default(false)
+  candidateSelection      Boolean @default(false)
+  qualityChecks           String  @default("UNKNOWN")
+  biasChecks              String  @default("UNKNOWN")
+  providerApproval        String  @default("UNKNOWN")
+
+  isDemo   Boolean @default(false)
+  demoKey  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  evaluations Evaluation[]
+}
+
+model Evaluation {
+  id         String   @id @default(cuid())
+  aiSystemId String
+  aiSystem   AISystem @relation(fields: [aiSystemId], references: [id], onDelete: Cascade)
+
+  ruleVersion String
+  evaluatedAt DateTime @default(now())
+
+  inputSnapshot String // JSON
+  overallStatus String
+
+  professionalReviewRequired String
+
+  ruleAssessment String // JSON
+  llmAssessment  String? // JSON
+  llmStatus      String  @default("SKIPPED")
+
+  createdAt DateTime @default(now())
+}
