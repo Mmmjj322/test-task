@@ -4,6 +4,7 @@ import { listDemoCases } from "@/demo/cases";
 import { DemoCaseCards } from "@/components/ui/DemoCaseCards";
 import styles from "@/components/ui/shared.module.css";
 import { STATUS_LABELS, type OverallStatus } from "@/server/domain/types";
+export const dynamic = "force-dynamic";
 
 function StatusBadge({ status }: { status: string | undefined }) {
   if (!status) return null;
